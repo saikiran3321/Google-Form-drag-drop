@@ -1,3 +1,8 @@
+import radio_template from './radio_template.js';
+import checkbox_template from './checkbox_template.js';
+import text_template from './text_template.js';
+import title_template from './title_template.js';
+import paragraph_template from './paragraph_template.js';
 export default {
 	data() {
 		return {
@@ -7,8 +12,32 @@ export default {
 				desc: "Thank you for taking the time to help us improve our product.",
 				inputs: [
 				{
-					title: "Question 1",
+					title: "Text Template",
+					type: "text",
+					desc: "",
+					mand: true,
+					value: "",
+					options: []
+				},
+				{
+					title: "Paragraph Template",
+					type: "paragraph",
+					desc: "",
+					mand: true,
+					value: "",
+					options: []
+				},
+				{
+					title: "Radio Template",
 					type: "radio",
+					desc: "",
+					mand: true,
+					value: "",
+					options: ['Option 1', 'Option 2', 'Option 3']
+				},
+				{
+					title: "Checkbox Template",
+					type: "checkbox",
 					desc: "",
 					mand: true,
 					value: "",
@@ -27,6 +56,13 @@ export default {
 	props: ["path"],
 	mounted() {
 		document.body.addEventListener('click', this.remove_active_class);
+	},
+	components: {
+		"radio_template" : radio_template,
+		"checkbox_template" : checkbox_template,
+		"text_template" : text_template,
+		"title_template" : title_template,
+		"paragraph_template" : paragraph_template
 	},
 	beforeDestroy() {
 		document.body.removeEventListener('click', this.remove_active_class);
@@ -68,7 +104,7 @@ export default {
 			const { innerHeight } = window;
 
 			if (clientY - scroll_thread  < scroll_thread) {
-				this.startS_srolling(-100);
+				this.start_scrolling(-100);
 			} else if (clientY + scroll_thread > innerHeight - scroll_thread) {
 				this.start_scrolling(100);
 			} else {
@@ -126,7 +162,7 @@ export default {
 					desc: "",
 					mand: true,
 					value: "",
-					options: ""
+					options: []
 				};
 
 			this.inputs_data[key].inputs.splice(index+1, 0, new_list);
@@ -145,11 +181,10 @@ export default {
 					desc: "",
 					mand: true,
 					value: "",
-					options: ['Option 1']
+					options: ['Option 1','Option 2','Option 3']
 				},
 				]
 			};
-
 			this.inputs_data.splice(key+1, 0, new_section);
 			setTimeout(() => {
 				this.active_index = null;
@@ -159,6 +194,11 @@ export default {
 			this.inputs_data[key].inputs[index].options.splice(opt_index, 1);
 		},
 		add_option: function(key,index,option) {
+			if(parseInt(option) > 1) {
+				option = option
+			}else {
+				option = 0;
+			}
 			const option_value = "Option "+(parseInt(option)+1);
 			this.inputs_data[key].inputs[index].options.push(option_value);
 		},
@@ -188,119 +228,25 @@ export default {
           </div>
           <ul class="list-group" ref="list_group">
             <template v-for="(item, index) in val.inputs">
-              <div class="d-flex">
-                <li v-on:click="class_active($event, (key * 10) + index)" :class="(active_index != null && active_index === (key * 10) + index) ? 'active-class list-group-item drag-over heading w-100' : 'list-group-item heading w-100'" :key="item.id" :class="{ dragging: dragging_item === item }" draggable="true" @dragstart="drag_start(item, key, index)" @dragover.prevent="drag_scroll(key,index,$event)" @dragenter.prevent="drag_enter(key, index)" @dragend="drag_ends">
-                	<div class="green-bar" v-if="item.type === 'title'"></div>
-                  <button class="drag-button">
-                    <i class="bi bi-arrows-move" title="Drag"></i>
-                  </button>
-                  <div class="d-flex header-title justify-content-between">
-                    <div><input type="text" class="form-control" v-model="item.title" placeholder="Enter here.."></div>
-                    <div v-if="(active_index != null && active_index === (key * 10) + index) && item.type != 'title'">
-                    	<select class="form-select" aria-label="Default select example" v-model="item.type">
-												<option value="text">Short answer</option>
-												<option value="paragraph">Paragraph</option>
-												<option value="radio">Multiple choice</option>
-												<option value="checkbox">checkboxes</option>
-											</select>
-                    </div>
-                  </div>
-                  <div class="header-desc">
-                  	<!-- <div class="mb-3">
-                  	<input type="text" class="form-control add-border" v-model="item.desc" placeholder="Enter description here..">
-                  	</div> -->
-                    <template v-if="item.type === 'paragraph'">
-                      <textarea class="form-control add-border" v-model="item.value" placeholder="Enter here.."></textarea>
-                    </template>
-                    <template v-else-if="item.type === 'text'">
-                      <input type="text" class="form-control add-border" v-model="item.value" placeholder="Enter here..">
-                    </template>
-                    <template v-else-if="item.type === 'title'">
-                      <input type="text" class="form-control add-border" v-model="item.value" placeholder="Enter Title here..">
-                    </template>
-                    <template v-else-if="item.type === 'radio'">
-                    	<div class="d-flex justify-content-between" v-for="(val, ind) in item.options" >
-	                      <div :key="ind" class="form-check">
-	                        <input class="form-check-input" type="radio" :name="'radio' + (key * 10) + index" :id="'radio' + (key * 10) + index + '-' + ind">
-	                        <label class="form-check-label" :for="'radio' + (key * 10) + index + '-' + ind">
-	                        	<input type="text" class="form-control" v-model="item.options[ind]" placeholder="Enter here.." v-if="(active_index != null && active_index === (key * 10) + index)">
-	                          <template v-else>{{ val }}</template>
-	                        </label>
-	                      </div>
-	                      <button><i class="bi bi-x" v-if="(active_index != null && active_index === (key * 10) + index)" v-on:click="remove_options(key,index,ind)"></i></button>
-                      </div>
-                      <div v-if="(active_index != null && active_index === (key * 10) + index)">
-                      	<div class="form-check">
-	                        <input class="form-check-input" type="radio" >
-	                        <label class="other-data form-check-label">
-	                          <button v-on:click="add_option(key,index,item.options.length)">Add Option</button> or <button class="active" v-on:click="add_option(key,index,item.options.length)">add "Other"</button>
-	                        </label>
-	                      </div>
-                      </div>
-                    </template>
-                    <template v-else-if="item.type === 'checkbox'">
-                    	<div class="d-flex justify-content-between" v-for="(val, ind) in item.options">
-	                      <div :key="ind" class="form-check">
-	                        <input class="form-check-input" type="checkbox" :id="'checkbox' + (key * 10) + index + '-' + ind">
-	                        <label class="form-check-label" :for="'checkbox' + (key * 10) + index + '-' + ind">
-	                          <input type="text" class="form-control" v-model="item.options[ind]" placeholder="Enter here.." v-if="(active_index != null && active_index === (key * 10) + index)">
-	                          <template v-else>{{ val }}</template>
-	                        </label>
-	                      </div>
-	                      <button><i class="bi bi-x" v-if="(active_index != null && active_index === (key * 10) + index)" v-on:click="remove_options(key,index,ind)"></i></button>
-	                    </div>
-	                    <div v-if="(active_index != null && active_index === (key * 10) + index)">
-                      	<div class="form-check">
-	                        <input class="form-check-input" type="checkbox" >
-	                        <label class="other-data form-check-label">
-	                          <button v-on:click="add_option(key,index,item.options.length)">Add Option</button> or <button class="active" v-on:click="add_option(key,index,item.options.length)">add "Other"</button>
-	                        </label>
-	                      </div>
-                      </div>
-                    </template>
-                  </div>
-                  <div v-if="(active_index != null && active_index === (key * 10) + index)">
-                    <div class="row">
-                      <div class="col-7"></div>
-                      <div class="col-5">
-                        <div class="d-flex justify-content-between">
-                          <button>
-                            <i class="bi bi-clipboard" title="Copy" v-on:click="copy_list(item,key,index)"></i>
-                          </button>
-                          <button>
-                            <i class="bi bi-trash" title="Delete" v-on:click="delete_list(key,index)"></i>
-                          </button>
-                          <div class="form-check form-switch">
-                            <label class="form-check-label" for="flexSwitchCheckChecked">Required</label>
-                            <input class="form-check-input" v-model="item.mand" type="checkbox" role="switch" id="flexSwitchCheckChecked">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <div v-if="(active_index != null && active_index === (key * 10) + index)" class="list-button">
-									<button class="button-padding">
-										<i class="bi bi-plus-circle" title="Add Question" v-on:click="create_list(key,index)"></i>
-									</button>
-									<!-- <button class="button-padding">
-										<i class="bi bi-file-earmark-arrow-down" title="Import Question"></i>
-									</button> -->
-									<button class="button-padding">
-										<i class="bi bi-fonts" title="Add Title" v-on:click="create_list_header(key,index)"></i>
-									</button>
-									<button class="button-padding">
-										<i class="bi bi-image" title="Add Image"></i>
-									</button>
-									<button class="button-padding">
-										<i class="bi bi-view-stacked" title="Add Section" v-on:click="create_section(key)"></i>
-									</button>
-                </div>
-              </div>
+              <template v-if="item.type === 'radio'">
+              	<radio_template :dragging="dragging_item" :path='path' :item='item' :index='index' :active='active_index' :key_active='key' @class_active="class_active" @remove_options="remove_options" @add_option="add_option" @copy_list="copy_list" @delete_list="delete_list" @create_list="create_list" @create_list_header="create_list_header" @create_section="create_section" @drag_scroll="drag_scroll" @drag_start="drag_start" @drag_enter="drag_enter" @drag_ends="drag_ends"></radio_template>
+              </template>
+              <template v-else-if="item.type === 'checkbox'">
+              	<checkbox_template :dragging="dragging_item" :path='path' :item='item' :index='index' :active='active_index' :key_active='key' @class_active="class_active" @remove_options="remove_options" @add_option="add_option" @copy_list="copy_list" @delete_list="delete_list" @create_list="create_list" @create_list_header="create_list_header" @create_section="create_section" @drag_scroll="drag_scroll" @drag_start="drag_start" @drag_enter="drag_enter" @drag_ends="drag_ends"></checkbox_template>
+              </template>
+              <template v-else-if="item.type === 'text'">
+              	<text_template :dragging="dragging_item" :path='path' :item='item' :index='index' :active='active_index' :key_active='key' @class_active="class_active" @remove_options="remove_options" @add_option="add_option" @copy_list="copy_list" @delete_list="delete_list" @create_list="create_list" @create_list_header="create_list_header" @create_section="create_section" @drag_scroll="drag_scroll" @drag_start="drag_start" @drag_enter="drag_enter" @drag_ends="drag_ends"></text_template>
+              </template>
+              <template v-else-if="item.type === 'title'">
+              	<title_template :dragging="dragging_item" :path='path' :item='item' :index='index' :active='active_index' :key_active='key' @class_active="class_active" @remove_options="remove_options" @add_option="add_option" @copy_list="copy_list" @delete_list="delete_list" @create_list="create_list" @create_list_header="create_list_header" @create_section="create_section" @drag_scroll="drag_scroll" @drag_start="drag_start" @drag_enter="drag_enter" @drag_ends="drag_ends"></title_template>
+              </template>
+              <template v-else-if="item.type === 'paragraph'">
+              	<paragraph_template :dragging="dragging_item" :path='path' :item='item' :index='index' :active='active_index' :key_active='key' @class_active="class_active" @remove_options="remove_options" @add_option="add_option" @copy_list="copy_list" @delete_list="delete_list" @create_list="create_list" @create_list_header="create_list_header" @create_section="create_section" @drag_scroll="drag_scroll" @drag_start="drag_start" @drag_enter="drag_enter" @drag_ends="drag_ends"></paragraph_template>
+              </template>
             </template>
           </ul>
         </template>
       </div>
     </div>
-    `
+  `
 };

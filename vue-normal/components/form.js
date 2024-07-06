@@ -68,7 +68,7 @@ export default {
 			const { innerHeight } = window;
 
 			if (clientY - scroll_thread  < scroll_thread) {
-				this.startS_srolling(-100);
+				this.start_scrolling(-100);
 			} else if (clientY + scroll_thread > innerHeight - scroll_thread) {
 				this.start_scrolling(100);
 			} else {
