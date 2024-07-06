@@ -1,0 +1,41 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css");
+* {margin: 0;padding: 0;box-sizing: border-box;}
+body {justify-content: center;align-items: center;background: #f0f0f0;color: rgb(32, 33, 36);font-family: 'Lato', sans-serif;}
+html{scroll-behavior: smooth;}
+[v-cloak] {display: none;}
+#navbar{width: 100%;overflow: hidden;padding:  15px 0;box-shadow: 2px 4px 2px rgba(17, 16, 16, 0.5);color: #fff;z-index: 1;background-color: #fff;}
+.log a{margin: 0px 50px;text-decoration: none;color: #009688;font-weight: 700;font-size: 30px;letter-spacing: 1px;}
+.nav_links{display: flex;width: 30%;list-style: none;justify-content: space-around;margin-top: 10px;}
+.nav_links a{text-decoration: none;color: rgb(27, 25, 25);font-weight: 600;font-size: 15px;text-transform: uppercase;}
+.nav_links a:hover {color: #009688;}
+.heading {position: relative;padding-bottom: 20px;color: #666 !important}
+.display-button {margin:0px 15px;}
+.display-button button {background-color: #008080; border: none;padding: 10px;border-radius: 5px 5px 0px 0px;}
+.heading, .survey-form {background-color: #fff;margin:0px 15px 20px 15px;padding: 25px;border-radius: 10px;box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.10)}
+.heading input {font-size: 18px;}
+.heading .h1 {font-size: 24px;font-weight: bold;}
+.heading textarea {margin-top: 10px;font-size: 16px;}
+.green-bar {background-color: #008080;height: 10px;width: 100%;position: absolute;top: 0;left: 0;border-top-left-radius: 10px;border-top-right-radius: 10px;}
+.green-button {background-color: #008080;height: 10px;width: 100%;position: absolute;top: 0;left: 0;border-top-left-radius: 0px !important;border-top-right-radius: 10px;}
+.list-group {list-style: none;padding: 0;border-radius: 10px !important}
+.list-group-item {background-color: #ffffff;border: 1px solid #ddd;border-radius: 10px;margin-bottom: 20px;padding: 15px;display: flex;flex-direction: column;transition: background-color 0.75s;}
+/*.list-group-item.dragging {opacity: 1;}*/
+.dragging {background-color: #ffffff;color: rgb(32, 33, 36);}
+.list-group-item .drag-over {margin: 50px;transition: margin 0.5s;background-color: #ffffff;color: #fff;}
+.drag-button { background: none; border: none; cursor: move; align-self: flex-start; padding: 0; display: none; position: absolute; left: 50%; transform: translate(-50%, -50%); }
+.list-group-item:hover .drag-button { display: block; height: 30px;}
+.drag-button i { font-size: 20px; color: #666; }
+.form-control { border: 0 !important; }
+.form-control:active, .form-control:focus { border-bottom: 2px solid #008080 !important; outline: none !important;box-shadow: none;}
+.header-title {margin: 15px; font-size: 32px; font-weight: 700}
+.header-desc {margin: 15px;font-size: 20px}
+.add-border { border-bottom: 2px solid #5f6368 !important; }
+.form-check-input { border-color:rgb(32, 33, 36);font-size:15px }
+.active-class {border-left: 8px solid #008080;}
+button { background: none; border: none; cursor: pointer; align-self: flex-start;}
+.other-data {font-size: 12px !important}
+button i { font-size: 20px; color: #666; }
+.active { color: #0d6efd; }
+.button-padding { padding: 10px; }
+.list-button { background-color: #ffffff;color: rgb(27, 25, 25);margin: 17px;width: auto; display: flex;flex-direction: column;}
+.list-group-item:first-child { border-radius: 10px }
